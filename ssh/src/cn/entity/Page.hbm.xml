@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="cn.entity">
+	<class name="Page" table="Page" >
+		<id name="id" column="id" type="java.lang.Integer">
+			<generator class="identity"></generator>
+		</id>
+		<property name="title" type="java.lang.String" length="50"/>
+		<property name="description" type="java.lang.String" length="100"/>
+		<property name="orderno" type="java.lang.Float">
+			<column name="orderno" sql-type="decimal(10,5)"></column>
+		</property>
+		
+		<many-to-one name="survey" class="Survey" column="surveyid"></many-to-one>
+		
+		<set name="questions" inverse="true" order-by="id">
+			<key column="pid"></key>
+			<one-to-many class="Question"/>
+		</set>
+	</class>
+</hibernate-mapping>

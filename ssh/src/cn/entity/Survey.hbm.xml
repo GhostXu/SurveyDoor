@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="cn.entity">
+	<class name="Survey" table="survey">
+		<id name="id" column="id" type="java.lang.Integer">
+			<generator class="identity"></generator>
+		</id>
+		<property name="title" type="java.lang.String" length="50"/>
+		<property name="preText" type="java.lang.String" length="50"/>
+		<property name="nextText" type="java.lang.String" length="50"/>
+		<property name="exitText" type="java.lang.String" length="50"/>
+		<property name="doneText" type="java.lang.String" length="50"/>
+		<property name="closed" type="java.lang.Boolean"/>
+		<property name="createTime" type="java.util.Date" update="false"/>
+		<property name="logoPhotoPath" type="java.lang.String" length="100" update="false"/>
+		<property name="maxOrderno" formula="(select max(p.orderno) from Page p where p.surveyid = id)" />
+		<property name="minOrderno" formula="(select min(p.orderno) from Page p where p.surveyid = id)" />
+		
+		<many-to-one name="user" class="User" column="userid"></many-to-one>
+		
+		<set name="pages" inverse="true" order-by="orderno">
+			<key column="surveyid"></key>
+			<one-to-many class="Page"/>
+		</set>
+	</class>
+</hibernate-mapping>

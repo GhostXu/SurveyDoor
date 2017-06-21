@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="cn.entity">
+	<class name="Answer" table="answer" >
+		<id name="id" column="id" type="java.lang.Integer">
+			<generator class="identity"></generator>
+		</id>
+		<property name="answerIds" type="java.lang.String" length="100"/>
+		<property name="otherAnswer" type="java.lang.String" length="100"/>
+		<property name="uuid" type="java.lang.String" length="50"></property>
+		<property name="answerTime" type="java.util.Date"></property>
+		<property name="questionId" type="java.lang.Integer"/>
+		<property name="surveyId" type="java.lang.Integer"/>
+	</class>
+</hibernate-mapping>

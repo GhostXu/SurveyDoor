@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="cn.entity">
+	<class name="Question" table="question">
+		<id name="id" column="id" type="java.lang.Integer">
+			<generator class="identity"></generator>
+		</id>
+		<property name="questionType" type="java.lang.Integer"/>
+		<property name="title" type="java.lang.String" length="50"/>
+		<property name="options" type="java.lang.String" length="50"/>
+		<property name="other" type="java.lang.Boolean"/>
+		<property name="otherStyle" type="java.lang.Integer"/>
+		<property name="otherSelectOptions" type="java.lang.String" length="50"/>
+		<property name="matrixRowTitles" type="java.lang.String" length="50"/>
+		<property name="matrixColTitles" type="java.lang.String" length="50"/>
+		<property name="matrixSelectOptions" type="java.lang.String" length="50"/>
+		
+		<many-to-one name="page" class="Page" column="pid"></many-to-one>
+	</class>
+</hibernate-mapping>
