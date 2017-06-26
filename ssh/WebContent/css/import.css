@@ -1,0 +1,37 @@
+.trClass{
+	width:98%;
+	height:50px;
+	border:1px solid #C4C4C4;
+	color:black;
+	position:absolute;
+	margin:10px 5px 5px 5px;
+}
+.trClass2{
+	width:98%;
+	height:100px;
+	border:1px solid #C4C4C4;
+	color:black;
+	position:absolute;
+	margin:75px 5px 0 5px;
+}
+.tdClass{
+	position:absolute;
+	margin-left:20px;
+	margin-top:-10px;
+	border:0px;
+	background-color:white;
+}
+.saClass{
+	color: black;
+	margin-top: 10px;
+	margin-left: 100px;
+	position: absolute;
+}
+table td{
+	border:0px;
+}
+input{
+	position:absolute;
+	margin-top:10px;
+	margin-left:400px;
+}

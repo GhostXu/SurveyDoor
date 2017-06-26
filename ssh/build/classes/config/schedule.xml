@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">  
+	<!-- 任务明细bean,对石英任务包装 -->
+	<bean id="jobDetailBean" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="cn.schedule.GenerateLogsTableTask"></property>
+		<property name="jobDataMap">
+			<map>
+				<entry key="logService" value-ref="logService"></entry>
+			</map>
+		</property>
+	</bean>
+  	
+  	<!-- cron触发bean，设置任务的调度策略 -->
+  	<bean id="cronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
+  		<property name="jobDetail" ref="jobDetailBean"></property>
+  		<!-- cron表达式 -->
+  		<property name="cronExpression">
+  			<!-- 0-59  0-59 0-23 1-30 1-12 1-7 1979-2099-->
+  			<!-- s     m    h    d    m    w   y -->
+  			<value>0 0 0 15 * ?</value>
+  		</property>
+  	</bean>
+  	
+  	<!-- 调度工厂bean，激活触发器，启动石英任务 -->
+  	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+  		<property name="triggers">
+  			<ref bean="cronTriggerBean"/>
+  		</property>
+  	</bean>
+</beans>
