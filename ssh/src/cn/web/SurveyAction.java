@@ -1,17 +1,28 @@
 package cn.web;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.util.ServletContextAware;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import cn.entity.Page;
+import cn.entity.Question;
 import cn.entity.Survey;
 import cn.entity.User;
 import cn.service.StatictiesService;
@@ -95,9 +106,13 @@ public class SurveyAction extends BaseAction<Survey> implements UserAware, Servl
 		return "designSurvey";
 	}
 	
+	// 导入Excel调查页面
+	public String importSurvey(){
+		return "importSurvey";
+	}
+	
 	//我的调查页面
 	public String mySurveys(){
-		System.out.println(user.getNickName());
 		this.mySurveys = surveyService.findMySurveys(user);
 		return "mySurveyList";
 	}
@@ -200,5 +215,92 @@ public class SurveyAction extends BaseAction<Survey> implements UserAware, Servl
 	public String ChartOutputAction(){
 		statictiesService.staticties(qid);
 		return null;
+	}
+	
+	//download the survey template
+	public String download(){
+		return "template";
+	}
+	
+	public InputStream getDownloadXls() {
+		try {
+			String filePath = ServletActionContext.getServletContext().getRealPath("export");
+			File file = new File(filePath + File.separator + "survey.xlsx");
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private File file;
+	private String fileName;
+	
+	public File getFile() {
+		return file;
+	}
+	public void setFile(File file) {
+		this.file = file;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	//upload file
+	@SuppressWarnings("resource")
+	public String uploadXls(){
+		InputStream is = null;
+		POIFSFileSystem fs = null;
+		HSSFWorkbook hs = null;
+
+		try {
+			is = new FileInputStream(file);
+			fs = new POIFSFileSystem(is);
+			hs = new HSSFWorkbook(fs);
+			HSSFSheet sheet = hs.getSheetAt(0);
+			HSSFRow row = sheet.getRow(0);
+			Survey survey = new Survey();
+			Page page = new Page();
+			int quesNum = sheet.getLastRowNum()-1;//去掉标题行
+			for(int i=1;i<=quesNum;i++){
+				Question question = new Question();
+				question.setPage(page);
+				question.setQuestionType(Integer.parseInt(getCellActualValue(row.getCell(2))));
+				question.setTitle(getCellActualValue(row.getCell(3)));
+				
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return SUCCESS;
+	}
+	private String getCellActualValue(HSSFCell cell) {
+		String value = "";
+		if(cell == null){
+			return "";
+		}
+		switch (cell.getCellType()) {
+		case HSSFCell.CELL_TYPE_STRING:
+			value = cell.getStringCellValue();
+			break;
+		case HSSFCell.CELL_TYPE_NUMERIC:
+			value = String.valueOf(cell.getStringCellValue());
+			break;
+		case HSSFCell.CELL_TYPE_BOOLEAN:
+			value = String.valueOf(cell.getStringCellValue());
+			break;
+		case HSSFCell.CELL_TYPE_BLANK:
+			value = "";
+			break;
+		}
+		if("".equals(value)||value == null){
+			return null;
+		}
+		return value;
 	}
 }

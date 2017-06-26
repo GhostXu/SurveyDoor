@@ -6,7 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Insert title here</title>
 
-<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.7.1.js" />
+<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.7.1.js" />
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-2.1.0.min.js" /> --%>
 </head>
 <body>
 

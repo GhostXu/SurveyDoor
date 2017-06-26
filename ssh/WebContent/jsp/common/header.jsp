@@ -10,8 +10,9 @@
 	<div class="divNavigatorInnerFrame">
 		<s:a action="loginAction_toLoginPage">[首页]</s:a>&nbsp;
 		<s:a action="surveyAction_newSurvey">[新建调查]</s:a>&nbsp;
+		<s:a action="surveyAction_importSurvey">[导入调查]</s:a>&nbsp;
 		<s:a action="surveyAction_mySurveys">[我的调查]</s:a>&nbsp;
-		<s:a action="engageSurveyAction_review?sid=33">[每日一面]</s:a>&nbsp;
+		<s:a action="engageSurveyAction_review?sid=1">[每日一面]</s:a>&nbsp;
 		<s:a action="engageSurveyAction_findAllAvailableSurveys">[参与调查]</s:a>&nbsp;
 		<s:a action="userAction_goRegist">[用户注册]</s:a>&nbsp;
 		<s:a action="userAuthorizeAction_findAllUsers">[用户授权管理]</s:a>&nbsp;
