@@ -52,6 +52,7 @@
 		
 		<action name="surveyAction_*" class="cn.web.SurveyAction" method="{1}">
 			<result name="designSurvey">/jsp/designSurvey.jsp</result>
+			<result name="importSurvey">/jsp/importSurvey.jsp</result>
 			<result name="mySurveyList">/jsp/mySurveyList.jsp</result>
 			<result name="editSurvey">/jsp/editSurvey.jsp</result>
 			<result name="mySurveysAction" type="redirectAction">
@@ -68,6 +69,13 @@
 			</interceptor-ref>
 			
 			<result name="analyzeSurvey">/jsp/analyzeSurveyList.jsp</result>
+			
+			<result name="template" type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="contentDisposition">attachment;filename="survey.xlsx"</param>
+				<!--inputName 流对象名 —— 比如这里写downloadXls，它就会自动去找Action中的getDownloadXls方法 -->
+				<param name="inputName">downloadXls</param>
+			</result>
 		</action>
 		
 		<action name="pageAction_*" class="cn.web.PageAction" method="{1}">
