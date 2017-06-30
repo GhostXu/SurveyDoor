@@ -259,18 +259,32 @@ public class SurveyAction extends BaseAction<Survey> implements UserAware, Servl
 			is = new FileInputStream(file);
 			fs = new POIFSFileSystem(is);
 			hs = new HSSFWorkbook(fs);
-			HSSFSheet sheet = hs.getSheetAt(0);
-			HSSFRow row = sheet.getRow(0);
+			//根据Excel名称新建调查
 			Survey survey = new Survey();
-			Page page = new Page();
-			int quesNum = sheet.getLastRowNum()-1;//去掉标题行
-			for(int i=1;i<=quesNum;i++){
-				Question question = new Question();
-				question.setPage(page);
-				question.setQuestionType(Integer.parseInt(getCellActualValue(row.getCell(2))));
-				question.setTitle(getCellActualValue(row.getCell(3)));
+			survey.setTitle(fileName);
+			survey.setUser(user);
+			/**
+			 * 1.得到所有sheet页数量，即page数量
+			 * 2.循环每个sheet页，得到当前sheet页中的问题数，新建page
+			 * 3.循环当前sheet页中的问题，并建立question、page、survey之间关系，保存到对应的表中
+			 */
+			int sheetNum = hs.getNumberOfSheets();//sheet页数量=调查页面的数量
+			for(int i=0;i<sheetNum;i++){
+				HSSFSheet sheet = hs.getSheetAt(i);//获取当前sheet
 				
+				Page page = new Page();//新建page
+				page.setTitle(sheet.getSheetName());
+				page.setSurvey(survey);//建立page和survey之间的关联关系
 				
+				int quesNum = sheet.getLastRowNum()-1;//去掉标题行，总行数  = 当前sheet页中问题行数
+				for(int j=1;j<=quesNum;j++){
+					HSSFRow row = sheet.getRow(j);//第j行
+					
+					Question question = new Question();
+					question.setPage(page);
+					question.setQuestionType(Integer.parseInt(getCellActualValue(row.getCell(2))));
+					question.setTitle(getCellActualValue(row.getCell(3)));
+				}
 			}
 			
 		} catch (Exception e) {
@@ -279,6 +293,7 @@ public class SurveyAction extends BaseAction<Survey> implements UserAware, Servl
 		
 		return SUCCESS;
 	}
+	
 	private String getCellActualValue(HSSFCell cell) {
 		String value = "";
 		if(cell == null){
